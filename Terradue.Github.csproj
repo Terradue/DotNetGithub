@@ -29,14 +29,26 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Web" />
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Terradue\Github\GithubProfile.cs" />
+    <Compile Include="Terradue\Github\GithubClientTokenResponse.cs" />
+    <Compile Include="Terradue\Github\GithubClient.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Terradue\" />
     <Folder Include="Terradue\Github\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Terradue.Portal\Terradue.Portal.csproj">
+      <Project>{2E8D7875-8347-4205-936B-F1BBA2164D87}</Project>
+      <Name>Terradue.Portal</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
