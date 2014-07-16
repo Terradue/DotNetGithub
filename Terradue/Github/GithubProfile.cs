@@ -8,7 +8,7 @@ using Terradue.Portal;
 namespace Terradue.Github {
 
 
-    [EntityTable("usr_github", EntityTableConfiguration.Custom, HasOwnerReference=true)]
+    [EntityTable("usr_github", EntityTableConfiguration.Custom, HasOwnerReference=true )]
     public class GithubProfile : Entity {
 
         public GithubClient Client { get; set; } 
@@ -23,8 +23,8 @@ namespace Terradue.Github {
 
         public override string AlternativeIdentifyingCondition {
             get {
-                if (UserId != 0)
-                    return String.Format("t.id_usr={0}", UserId);
+                if (OwnerId != 0)
+                    return String.Format("t.id_usr={0}", OwnerId);
                 else
                     return null;
             }
@@ -40,7 +40,7 @@ namespace Terradue.Github {
 
         public static GithubProfile FromUserId(IfyContext context, int userId){
             GithubProfile result = new GithubProfile(context);
-            result.UserId = userId;
+            result.OwnerId = userId;
             result.Load();
             return result;
         }
