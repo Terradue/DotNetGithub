@@ -2,6 +2,7 @@
 using System.Net;
 using System.IO;
 using ServiceStack.Text;
+using System.Collections.Generic;
 
 namespace Terradue.Github {
 
@@ -56,7 +57,7 @@ namespace Terradue.Github {
                 var httpResponse = (HttpWebResponse)request.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
                     string result = streamReader.ReadToEnd();
-                    GithubClientTokenResponse response = JsonSerializer.DeserializeFromString<GithubClientTokenResponse>(result);
+                    GithubTokenResponse response = JsonSerializer.DeserializeFromString<GithubTokenResponse>(result);
                     token = response.token;
                 }
             }
@@ -79,17 +80,36 @@ namespace Terradue.Github {
             var httpResponse = (HttpWebResponse)request.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
                 string result = streamReader.ReadToEnd();
-                GithubClientTokenResponse response = JsonSerializer.DeserializeFromString<GithubClientTokenResponse>(result);
+                GithubTokenResponse response = JsonSerializer.DeserializeFromString<GithubTokenResponse>(result);
                 isValid = (token.Equals(response.token));
             }
             return isValid;
         }
+            
+        public List<GithubKeyResponse> GetSSHKeys(){
+            List<GithubKeyResponse> result = new List<GithubKeyResponse>();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/user/keys?access_token=" + this.AccessToken);
+            request.Method = "GET";
+            request.ContentType = "application/json";
+            request.UserAgent = this.ClientName;
 
+            var httpResponse = (HttpWebResponse)request.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+                string json = streamReader.ReadToEnd();
+                result = JsonSerializer.DeserializeFromString<List<GithubKeyResponse>>(json);
+            }
+            return result;
+        }
+
+        public bool HasKey(string key){
+            List<GithubKeyResponse> result = GetSSHKeys();
+            foreach (GithubKeyResponse rkey in result)
+                if (rkey.key.Equals(key)) return true;
+            return false;
+        }
 
         public void AddSshKey(string title, string key){
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.ApiBaseUrl + "/user/keys?"
-                                                                       + "access_token=" + this.AccessToken);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.ApiBaseUrl + "/user/key?access_token=" + this.AccessToken);
             request.Method = "POST";
             request.ContentType = "application/json";
             request.Headers.Add("X-OAuth-Scopes", "user,write:public_key");

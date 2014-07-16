@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Terradue.Github {
 
     [DataContract]
-    public class GithubClientTokenResponse {
+    public class GithubTokenResponse {
         [DataMember]
         public GithubClientResponse app { get; set; }
         [DataMember]
@@ -26,7 +26,6 @@ namespace Terradue.Github {
         public string url { get; set; }
     }
 
-
     [DataContract]
     public class GithubClientResponse {
         [DataMember]
@@ -35,6 +34,20 @@ namespace Terradue.Github {
         public string name { get; set; }
         [DataMember]
         public string url { get; set; }
+    }
+
+    [DataContract]
+    public class GithubKeyResponse {
+        [DataMember]
+        public int id { get; set; }
+        [DataMember]
+        public string key { get; set; }
+        [DataMember]
+        public string url { get; set; }
+        [DataMember]
+        public string title { get; set; }
+        [DataMember]
+        public string verified { get; set; }
     }
 
 

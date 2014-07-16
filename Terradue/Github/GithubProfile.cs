@@ -45,7 +45,9 @@ namespace Terradue.Github {
             this.Store();
         }
 
-
+        public void AddSSHKey(string title, string key){
+            this.Client.AddSshKey(title, key);
+        }
 
     }
 }
