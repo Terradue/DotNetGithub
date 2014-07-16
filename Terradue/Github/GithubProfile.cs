@@ -21,6 +21,15 @@ namespace Terradue.Github {
 
         public bool HasSSHKey { get; set; }
 
+        public override string AlternativeIdentifyingCondition {
+            get {
+                if (UserId != 0)
+                    return String.Format("t.id_usr={0}", UserId);
+                else
+                    return null;
+            }
+        }
+
         public GithubProfile(IfyContext context) : base(context) {
             this.Client = new GithubClient(context.BaseUrl, context.GetConfigValue("Github-client-name"), context.GetConfigValue("Github-client-id"), context.GetConfigValue("Github-client-secret"));
         }
