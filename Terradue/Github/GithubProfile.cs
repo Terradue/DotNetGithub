@@ -35,11 +35,7 @@ namespace Terradue.Github {
         public static GithubProfile FromId(IfyContext context, int userId){
             GithubProfile result = new GithubProfile(context);
             result.Id = userId;
-            try{
-                result.Load();
-            }catch(Exception e){
-                result.Store();
-            }
+            result.Load();
             return result;
         }
 
