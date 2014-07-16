@@ -7,8 +7,7 @@ using Terradue.Portal;
 
 namespace Terradue.Github {
 
-
-    [EntityTable("usr_github", EntityTableConfiguration.Custom, HasOwnerReference=true )]
+    [EntityTable("usr_github", EntityTableConfiguration.Custom)]
     public class GithubProfile : Entity {
 
         public GithubClient Client { get; set; } 
@@ -21,27 +20,26 @@ namespace Terradue.Github {
 
         public bool HasSSHKey { get; set; }
 
-        public override string AlternativeIdentifyingCondition {
-            get {
-                if (OwnerId != 0)
-                    return String.Format("t.id_usr={0}", OwnerId);
-                else
-                    return null;
-            }
-        }
-
         public GithubProfile(IfyContext context) : base(context) {
             this.Client = new GithubClient(context.BaseUrl, context.GetConfigValue("Github-client-name"), context.GetConfigValue("Github-client-id"), context.GetConfigValue("Github-client-secret"));
+        }
+
+        public GithubProfile(IfyContext context, int usrid) : this(context) {
+            this.Id = usrid;
         }
 
         public GithubProfile(IfyContext context, GithubClient Application) : base(context) {
             this.Client = Application;
         }
 
-        public static GithubProfile FromUserId(IfyContext context, int userId){
+        public static GithubProfile FromId(IfyContext context, int userId){
             GithubProfile result = new GithubProfile(context);
-            result.OwnerId = userId;
-            result.Load();
+            result.Id = userId;
+            try{
+                result.Load();
+            }catch(Exception e){
+                result.Store();
+            }
             return result;
         }
 
