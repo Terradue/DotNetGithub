@@ -22,3 +22,11 @@ INSERT INTO config (`name`, `type`, `caption`, `hint`, `optional`) VALUES ('Gith
 INSERT INTO config (`name`, `type`, `caption`, `hint`, `optional`) VALUES ('Github-client-id', 'string', 'Github client Id', 'Enter the value of the Github client Id', '0');
 INSERT INTO config (`name`, `type`, `caption`, `hint`, `optional`) VALUES ('Github-client-secret', 'string', 'Github client secret', 'Enter the value of the Github client secret', '0');
 -- RESULT
+
+/*****************************************************************************/
+
+-- Adding rows in usr_github
+INSERT INTO usr_github (`id`) SELECT id FROM usr;
+-- RESULT
+
+/*****************************************************************************/
