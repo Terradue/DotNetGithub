@@ -11,6 +11,7 @@ CREATE TABLE usr_github (
     username varchar(50) COMMENT 'Username on github',
 	token varchar(50) COMMENT 'Token to access github',
 	CONSTRAINT pk_usrgithub PRIMARY KEY (id),
+	CONSTRAINT u_usrgithub UNIQUE (id_usr),
     CONSTRAINT fk_usrgithub_usr FOREIGN KEY (id_usr) REFERENCES usr(id) ON DELETE CASCADE
 ) Engine=InnoDB COMMENT 'User github';
 -- RESULT
