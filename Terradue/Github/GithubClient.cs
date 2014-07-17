@@ -118,7 +118,7 @@ namespace Terradue.Github {
             request.Headers.Add("X-Accepted-OAuth-Scopes", "write:public_key");
             request.UserAgent = this.ClientName;
 
-            string json = "{'title':'"+title+"','key':'"+key+"'}";
+            string json = "{\"title\":\""+title+"\",\"key\":\""+key+"\"}";
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
                 streamWriter.Write(json);
