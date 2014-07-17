@@ -45,7 +45,7 @@ namespace Terradue.Github {
         public bool HasSSHKey { 
             get{ 
                 if(this.PublicSSHKey == null) return false;
-                return this.Client.HasKey(this.PublicSSHKey); 
+                return this.Client.HasKey(this.PublicSSHKey, this.Token); 
             } 
         }
 
@@ -73,12 +73,12 @@ namespace Terradue.Github {
             this.Store();
         }
 
-        public bool IsSSHKey(string key){
-            return this.Client.HasKey(key);
+        public void AddSSHKey(){
+            this.Client.AddSshKey("Terradue Certificate", this.PublicSSHKey, this.Token);
         }
 
         public void AddSSHKey(string title, string key){
-            this.Client.AddSshKey(title, key);
+            this.Client.AddSshKey(title, key, this.Token);
         }
 
     }

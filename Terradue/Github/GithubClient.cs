@@ -13,7 +13,6 @@ namespace Terradue.Github {
         private string ClientName { get; set; }
         private string ClientId { get; set; }
         private string ClientSecret { get; set; }
-        public string AccessToken { get; set; }
 
         public GithubClient(string baseurl){
             this.BaseUrl = baseurl;
@@ -35,7 +34,8 @@ namespace Terradue.Github {
         /// <param name="scopes">Scopes.</param>
         /// <param name="note">Note.</param>
         public string GetAuthorizationToken(string username, string password, string scopes, string note){
-
+            if (username == null)
+                throw new Exception("User github name not set");
             string token = null;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/authorizations/clients/" + ClientId);
             request.Method = "PUT";
@@ -70,6 +70,8 @@ namespace Terradue.Github {
         /// <returns><c>true</c>, if authorization token was validated, <c>false</c> otherwise.</returns>
         /// <param name="token">Token.</param>
         public bool ValidateAuthorizationToken(string token){
+            if (token == null) return false;
+
             bool isValid = false;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/applications/" + ClientId + "/tokens/" + token);
             request.Method = "GET";
@@ -86,9 +88,9 @@ namespace Terradue.Github {
             return isValid;
         }
             
-        public List<GithubKeyResponse> GetSSHKeys(){
+        public List<GithubKeyResponse> GetSSHKeys(string token){
             List<GithubKeyResponse> result = new List<GithubKeyResponse>();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/user/keys?access_token=" + this.AccessToken);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/user/keys?access_token=" + token);
             request.Method = "GET";
             request.ContentType = "application/json";
             request.UserAgent = this.ClientName;
@@ -101,24 +103,22 @@ namespace Terradue.Github {
             return result;
         }
 
-        public bool HasKey(string key){
-            List<GithubKeyResponse> result = GetSSHKeys();
+        public bool HasKey(string key, string token){
+            List<GithubKeyResponse> result = GetSSHKeys(token);
             foreach (GithubKeyResponse rkey in result)
                 if (rkey.key.Equals(key)) return true;
             return false;
         }
 
-        public void AddSshKey(string title, string key){
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.ApiBaseUrl + "/user/key?access_token=" + this.AccessToken);
+        public void AddSshKey(string title, string key, string token){
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.ApiBaseUrl + "/user/keys?access_token=" + token);
             request.Method = "POST";
             request.ContentType = "application/json";
-            request.Headers.Add("X-OAuth-Scopes", "user,write:public_key");
-            request.Headers.Add("X-Accepted-OAuth-Scopes", "user,write:public_key");
+            request.Headers.Add("X-OAuth-Scopes", "write:public_key");
+            request.Headers.Add("X-Accepted-OAuth-Scopes", "write:public_key");
+            request.UserAgent = this.ClientName;
 
-            string json = "{" +
-                "\"title\":\""+title+"\"," +
-                "\"key\":\""+key+"\"" +
-                "}";
+            string json = "{'title':'"+title+"','key':'"+key+"'}";
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
                 streamWriter.Write(json);
