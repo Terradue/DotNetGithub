@@ -7,17 +7,17 @@ using Terradue.Portal;
 
 namespace Terradue.Github {
 
-    [EntityTable("usr_github", EntityTableConfiguration.Custom)]
+    [EntityTable("usr_github", EntityTableConfiguration.Custom, HasAutomaticIds=false)]
     public class GithubProfile : Entity {
 
-        public new int Id { 
-            get { 
-                return base.Id;
-            } 
-            set { 
-                base.Id = value;
-            } 
-        }
+//        public new int Id { 
+//            get { 
+//                return base.Id;
+//            } 
+//            set { 
+//                base.Id = value;
+//            } 
+//        }
 
         private GithubClient client { get; set; }
         public GithubClient Client { 
@@ -41,7 +41,13 @@ namespace Terradue.Github {
         [EntityDataField("token")]
         public string Token { get; set; }
 
-        public bool HasSSHKey { get; set; }
+        public string PublicSSHKey { get; set; }
+        public bool HasSSHKey { 
+            get{ 
+                if(this.PublicSSHKey == null) return false;
+                return this.Client.HasKey(this.PublicSSHKey); 
+            } 
+        }
 
         public GithubProfile(IfyContext context, int usrid) : base(context) {
             this.Id = usrid;
@@ -53,6 +59,11 @@ namespace Terradue.Github {
             return result;
         }
 
+        public void Store(int id){
+            this.Id = id;
+            base.Store();
+        }
+
         public bool IsAuthorizationTokenValid(){
             return this.Client.ValidateAuthorizationToken(this.Token);
         }
@@ -60,6 +71,10 @@ namespace Terradue.Github {
         public void GetNewAuthorizationToken(string password, string scopes, string note){
             this.Token = this.Client.GetAuthorizationToken(this.GithubName, password, scopes, note);
             this.Store();
+        }
+
+        public bool IsSSHKey(string key){
+            return this.Client.HasKey(key);
         }
 
         public void AddSSHKey(string title, string key){
