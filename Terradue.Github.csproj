@@ -33,17 +33,29 @@
       <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="ServiceStack.ServiceInterface">
+      <HintPath>..\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Terradue\Github\GithubProfile.cs" />
     <Compile Include="Terradue\Github\GithubClient.cs" />
     <Compile Include="Terradue\Github\GithubResponse.cs" />
+    <Compile Include="Terradue\WebService\Model\WebGithubProfile.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Terradue\" />
     <Folder Include="Terradue\Github\" />
+    <Folder Include="Terradue\WebService\" />
+    <Folder Include="Terradue\WebService\Model\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Terradue.Portal\Terradue.Portal.csproj">
