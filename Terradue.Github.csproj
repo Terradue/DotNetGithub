@@ -62,5 +62,13 @@
       <Project>{2E8D7875-8347-4205-936B-F1BBA2164D87}</Project>
       <Name>Terradue.Portal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Terradue.Certification\Terradue.Certification.csproj">
+      <Project>{FF303408-6151-4E9E-93A5-B2B6EC0207A0}</Project>
+      <Name>Terradue.Certification</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Terradue.WebService.Model\Terradue.WebService.Model.csproj">
+      <Project>{52346D96-A50D-416C-BA49-361B925418EB}</Project>
+      <Name>Terradue.WebService.Model</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

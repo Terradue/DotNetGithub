@@ -4,20 +4,12 @@ using System.IO;
 using System.Web;
 using ServiceStack.Text;
 using Terradue.Portal;
+using Terradue.Security.Certification;
 
 namespace Terradue.Github {
 
     [EntityTable("usr_github", EntityTableConfiguration.Custom, HasAutomaticIds=false)]
     public class GithubProfile : Entity {
-
-//        public new int Id { 
-//            get { 
-//                return base.Id;
-//            } 
-//            set { 
-//                base.Id = value;
-//            } 
-//        }
 
         private GithubClient client { get; set; }
         public GithubClient Client { 
@@ -36,16 +28,17 @@ namespace Terradue.Github {
         } 
 
         [EntityDataField("username")]
-        public string GithubName { get; set; }
+        public new string Name { get; set; }
 
         [EntityDataField("token")]
         public string Token { get; set; }
 
+        public string Avatar { get; set; }
         public string PublicSSHKey { get; set; }
         public bool HasSSHKey { 
             get{ 
                 if(this.PublicSSHKey == null) return false;
-                return this.Client.HasKey(this.PublicSSHKey, this.Token); 
+                return this.Client.HasKey(this.PublicSSHKey, this.Token, this.Name);
             } 
         }
 
@@ -69,7 +62,7 @@ namespace Terradue.Github {
         }
 
         public void GetNewAuthorizationToken(string password, string scopes, string note){
-            this.Token = this.Client.GetAuthorizationToken(this.GithubName, password, scopes, note);
+            this.Token = this.Client.GetAuthorizationToken(this.Name, password, scopes, note);
             this.Store();
         }
 
@@ -79,6 +72,27 @@ namespace Terradue.Github {
 
         public void AddSSHKey(string title, string key){
             this.Client.AddSshKey(title, key, this.Token);
+        }
+
+        public override void Load(){
+            base.Load();
+
+            //Public ssh key
+            CertificateUser cert = CertificateUser.FromId(context, this.Id);
+            this.PublicSSHKey = cert.PubCertificateContent;
+
+            //Github information
+            if (this.Name != null) {
+                try{
+                    GithubUserResponse usr = this.Client.GetUser(this.Name);
+                    this.Identifier = usr.id.ToString();
+                    this.Avatar = usr.avatar_url;
+                    // ...
+                    // we can get more if we want to
+
+                }catch(Exception e){
+                }
+            }
         }
 
     }

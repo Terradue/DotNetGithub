@@ -88,7 +88,7 @@ namespace Terradue.Github {
             return isValid;
         }
             
-        public List<GithubKeyResponse> GetSSHKeys(string token){
+        public List<GithubKeyResponse> GetSSHKeysPrivate(string token){
             List<GithubKeyResponse> result = new List<GithubKeyResponse>();
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/user/keys?access_token=" + token);
             request.Method = "GET";
@@ -103,8 +103,24 @@ namespace Terradue.Github {
             return result;
         }
 
-        public bool HasKey(string key, string token){
-            List<GithubKeyResponse> result = GetSSHKeys(token);
+        public List<GithubKeyResponse> GetSSHKeysPublic(string username){
+            List<GithubKeyResponse> result = new List<GithubKeyResponse>();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/users/" + username + "/keys");
+            request.Method = "GET";
+            request.ContentType = "application/json";
+            request.UserAgent = this.ClientName;
+
+            var httpResponse = (HttpWebResponse)request.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+                string json = streamReader.ReadToEnd();
+                result = JsonSerializer.DeserializeFromString<List<GithubKeyResponse>>(json);
+            }
+            return result;
+        }
+
+        public bool HasKey(string key, string token, string username){
+            List<GithubKeyResponse> result;
+            result = GetSSHKeysPublic(username);
             foreach (GithubKeyResponse rkey in result)
                 if (rkey.key.Equals(key)) return true;
             return false;
@@ -132,6 +148,20 @@ namespace Terradue.Github {
             }
         }
 
+        public GithubUserResponse GetUser(string githubName) {
+            GithubUserResponse result = new GithubUserResponse();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/users/" + githubName);
+            request.Method = "GET";
+            request.ContentType = "application/json";
+            request.UserAgent = this.ClientName;
+
+            var httpResponse = (HttpWebResponse)request.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+                string json = streamReader.ReadToEnd();
+                result = JsonSerializer.DeserializeFromString<GithubUserResponse>(json);
+            }
+            return result;
+        }
     }
 }
 

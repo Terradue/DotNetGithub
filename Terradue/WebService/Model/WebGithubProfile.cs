@@ -11,16 +11,22 @@ using Terradue.Github;
 namespace Terradue.WebService.Model {
 
     [Route("/github/token", "PUT", Summary = "GET a new token for the user", Notes = "User is current user")]
-    public class GetNewGithubToken : IReturn<bool> {
+    public class GetNewGithubToken : WebGithubProfile, IReturn<WebGithubProfile> {
         [ApiMember(Name = "Password", Description = "User Password", ParameterType = "query", DataType = "string", IsRequired = true)]
         public string Password { get; set; }
     }
 
     [Route("/github/sshkey", "POST", Summary = "Add a key for the current user", Notes = "User is the current user")]
-    public class AddGithubSSHKeyToCurrentUser : IReturn<bool> {}
+    public class AddGithubSSHKeyToCurrentUser : IReturn<WebGithubProfile> {}
 
     [Route("/github/sshkey", "DELETE", Summary = "Add a key for the current user", Notes = "User is the current user")]
-    public class DeleteSSHKeyOfCurrentUser : IReturn<bool> {}
+    public class DeleteSSHKeyOfCurrentUser : IReturn<WebGithubProfile> {}
+
+    [Route("/github/user", "GET", Summary = "GET user github information", Notes = "User is the current user")]
+    public class GetGithubUser : IReturn<WebGithubProfile> {}
+
+    [Route("/github/user", "PUT", Summary = "Update github information about current user", Notes = "User is the current user")]
+    public class UpdateGithubUser : WebGithubProfile, IReturn<WebGithubProfile> {}
 
 
     //-------------------------------------------------------------------------------------------------------------------------
@@ -30,13 +36,16 @@ namespace Terradue.WebService.Model {
     /// <summary>
     /// User.
     /// </summary>
-    public class WebGithubProfile {
+    public class WebGithubProfile : WebEntity {
 
-        [ApiMember(Name = "GithubName", Description = "Github username", ParameterType = "query", DataType = "String", IsRequired = true)]
-        public String GithubName { get; set; }
+        [ApiMember(Name = "Id", Description = "user id", ParameterType = "query", DataType = "int", IsRequired = true)]
+        public int Id { get; set; }
 
         [ApiMember(Name = "HasSSHKey", Description = "Has User a SSH key on github", ParameterType = "query", DataType = "bool", IsRequired = true)]
         public bool HasSSHKey { get; set; }
+
+        [ApiMember(Name = "Avatar", Description = "Github avatar url", ParameterType = "query", DataType = "String", IsRequired = true)]
+        public String Avatar { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Terradue.Metadata.Model.User"/> class.
@@ -47,8 +56,9 @@ namespace Terradue.WebService.Model {
         /// Initializes a new instance of the <see cref="Terradue.WebService.Model.User"/> class.
         /// </summary>
         /// <param name="entity">Entity.</param>
-        public WebGithubProfile(GithubProfile entity) {
-            this.GithubName = entity.GithubName;
+        public WebGithubProfile(GithubProfile entity) : base(entity) {
+            this.Avatar = entity.Avatar;
+            this.HasSSHKey = entity.HasSSHKey;
         }
 
         /// <summary>
@@ -56,15 +66,9 @@ namespace Terradue.WebService.Model {
         /// </summary>
         /// <returns>The entity.</returns>
         /// <param name="context">Context.</param>
-        public GithubProfile ToEntity(IfyContext context, int usrid){
-            GithubProfile user;
-            try{
-                user = GithubProfile.FromId(context, usrid);
-            }catch(Exception){
-                user = new GithubProfile(context, usrid);
-            }
-                       
-            user.GithubName = this.GithubName;
+        public GithubProfile ToEntity(IfyContext context, GithubProfile input){
+            GithubProfile user = (input == null ? new GithubProfile(context, this.Id) : input);
+            user.Name = this.Name;
             return user;
         }
             
