@@ -44,6 +44,9 @@ namespace Terradue.WebService.Model {
         [ApiMember(Name = "HasSSHKey", Description = "Has User a SSH key on github", ParameterType = "query", DataType = "bool", IsRequired = true)]
         public bool HasSSHKey { get; set; }
 
+        [ApiMember(Name = "CertPub", Description = "User public cert ssh key", ParameterType = "query", DataType = "String", IsRequired = true)]
+        public String CertPub { get; set; }
+
         [ApiMember(Name = "Avatar", Description = "Github avatar url", ParameterType = "query", DataType = "String", IsRequired = true)]
         public String Avatar { get; set; }
 
@@ -58,6 +61,7 @@ namespace Terradue.WebService.Model {
         /// <param name="entity">Entity.</param>
         public WebGithubProfile(GithubProfile entity) : base(entity) {
             this.Avatar = entity.Avatar;
+            this.CertPub = entity.PublicSSHKey;
             this.HasSSHKey = entity.HasSSHKey;
         }
 
