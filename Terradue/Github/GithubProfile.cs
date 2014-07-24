@@ -8,7 +8,7 @@ using Terradue.Security.Certification;
 
 namespace Terradue.Github {
 
-    [EntityTable("usr_github", EntityTableConfiguration.Custom, HasAutomaticIds=false)]
+    [EntityTable("usr_github", EntityTableConfiguration.Custom, HasAutomaticIds=false, NameField="username")]
     public class GithubProfile : Entity {
 
         private GithubClient client { get; set; }
@@ -26,9 +26,6 @@ namespace Terradue.Github {
                 client = value;
             }
         } 
-
-        [EntityDataField("username")]
-        public new string Name { get; set; }
 
         [EntityDataField("token")]
         public string Token { get; set; }

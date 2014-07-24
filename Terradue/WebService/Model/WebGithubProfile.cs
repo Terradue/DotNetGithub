@@ -38,9 +38,6 @@ namespace Terradue.WebService.Model {
     /// </summary>
     public class WebGithubProfile : WebEntity {
 
-        [ApiMember(Name = "Id", Description = "user id", ParameterType = "query", DataType = "int", IsRequired = true)]
-        public int Id { get; set; }
-
         [ApiMember(Name = "HasSSHKey", Description = "Has User a SSH key on github", ParameterType = "query", DataType = "bool", IsRequired = true)]
         public bool HasSSHKey { get; set; }
 
