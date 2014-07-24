@@ -34,8 +34,12 @@ namespace Terradue.Github {
         public string PublicSSHKey { get; set; }
         public bool HasSSHKey { 
             get{ 
-                if(this.PublicSSHKey == null) return false;
-                return this.Client.HasKey(this.PublicSSHKey, this.Token, this.Name);
+                try{
+                    if(this.PublicSSHKey == null) return false;
+                    return this.Client.HasKey(this.PublicSSHKey, this.Token, this.Name);
+                }catch(Exception){
+                    return false;
+                }
             } 
         }
 
@@ -88,6 +92,8 @@ namespace Terradue.Github {
                     // we can get more if we want to
 
                 }catch(Exception e){
+                    this.Avatar = null;
+                    this.Identifier = null;
                 }
             }
         }
