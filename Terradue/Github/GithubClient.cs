@@ -105,7 +105,7 @@ namespace Terradue.Github {
 
         public List<GithubKeyResponse> GetSSHKeysPublic(string username){
             List<GithubKeyResponse> result = new List<GithubKeyResponse>();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/users/" + username + "/keys");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/users/" + username + "/keys" + "?client_id=" + ClientId + "&client_secret=" + ClientSecret);
             request.Method = "GET";
             request.ContentType = "application/json";
             request.UserAgent = this.ClientName;
@@ -150,7 +150,7 @@ namespace Terradue.Github {
 
         public GithubUserResponse GetUser(string githubName) {
             GithubUserResponse result = new GithubUserResponse();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/users/" + githubName);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/users/" + githubName + "?client_id=" + ClientId + "&client_secret=" + ClientSecret);
             request.Method = "GET";
             request.ContentType = "application/json";
             request.UserAgent = this.ClientName;
