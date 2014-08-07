@@ -59,7 +59,13 @@ namespace Terradue.Github {
         }
 
         public bool IsAuthorizationTokenValid(){
-            return this.Client.ValidateAuthorizationToken(this.Token);
+            if (this.Token == null) return false;
+            bool isValid = this.Client.ValidateAuthorizationToken(this.Token);
+            if (!isValid) {
+                this.Token = null;
+                this.Store();
+            }
+            return isValid;
         }
 
         public void GetNewAuthorizationToken(string password, string scopes, string note){

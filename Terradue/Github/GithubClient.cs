@@ -79,11 +79,15 @@ namespace Terradue.Github {
             request.UserAgent = this.ClientName;
             request.Headers.Add(HttpRequestHeader.Authorization, "Basic " + Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(this.ClientId + ":" + this.ClientSecret)));
 
-            var httpResponse = (HttpWebResponse)request.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-                string result = streamReader.ReadToEnd();
-                GithubTokenResponse response = JsonSerializer.DeserializeFromString<GithubTokenResponse>(result);
-                isValid = (token.Equals(response.token));
+            try{
+                var httpResponse = (HttpWebResponse)request.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+                    string result = streamReader.ReadToEnd();
+                    GithubTokenResponse response = JsonSerializer.DeserializeFromString<GithubTokenResponse>(result);
+                    isValid = (token.Equals(response.token));
+                }
+            }catch(Exception){
+                return false;
             }
             return isValid;
         }
