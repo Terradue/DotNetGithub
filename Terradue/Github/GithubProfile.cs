@@ -86,7 +86,10 @@ namespace Terradue.Github {
 
             //Public ssh key
             CertificateUser cert = CertificateUser.FromId(context, this.Id);
-            this.PublicSSHKey = cert.PubCertificateContent;
+            try{
+                this.PublicSSHKey = cert.PubCertificateContent;
+            }catch(Exception e){
+            }
 
             //Github information
             if (this.Name != null) {

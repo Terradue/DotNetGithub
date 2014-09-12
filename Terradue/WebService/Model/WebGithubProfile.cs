@@ -22,7 +22,7 @@ namespace Terradue.WebService.Model {
     [Route("/github/sshkey", "DELETE", Summary = "Add a key for the current user", Notes = "User is the current user")]
     public class DeleteSSHKeyOfCurrentUser : IReturn<WebGithubProfile> {}
 
-    [Route("/github/user", "GET", Summary = "GET user github information", Notes = "User is the current user")]
+    [Route("/github/user/current", "GET", Summary = "GET user github information", Notes = "User is the current user")]
     public class GetGithubUser : IReturn<WebGithubProfile> {}
 
     [Route("/github/user", "PUT", Summary = "Update github information about current user", Notes = "User is the current user")]
