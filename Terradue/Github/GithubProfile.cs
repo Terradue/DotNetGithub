@@ -5,6 +5,9 @@ using System.Web;
 using ServiceStack.Text;
 using Terradue.Portal;
 using Terradue.Security.Certification;
+using System.Collections.Generic;
+using Terradue.Github.Reponse;
+using System.Data;
 
 namespace Terradue.Github {
 
@@ -47,9 +50,35 @@ namespace Terradue.Github {
             this.Id = usrid;
         }
 
+        public GithubProfile(IfyContext context, string name) : base(context) {
+            this.Name = name;
+        }
+
+        public override string AlternativeIdentifyingCondition{
+            get { 
+                if (Name != null) return String.Format("t.username='{0}'",Name); 
+                return null;
+            }
+        }
+
         public static GithubProfile FromId(IfyContext context, int userId){
             GithubProfile result = new GithubProfile(context, userId);
             result.Load();
+            return result;
+        }
+
+        public static GithubProfile FromUsername(IfyContext context, string name) {
+            GithubProfile result = new GithubProfile(context, name);
+            //result.Load();
+            string sql = String.Format("SELECT id, token FROM usr_github WHERE username='{0}';", name);
+            IDbConnection dbConnection = context.GetDbConnection();
+            IDataReader reader = context.GetQueryResult(sql, dbConnection);
+
+            if (reader.Read ()) {
+                result.Id = reader.GetInt32(0);
+                result.Token = reader.GetString(1);
+            }
+            context.CloseQueryResult(reader, dbConnection);
             return result;
         }
 
@@ -68,7 +97,7 @@ namespace Terradue.Github {
             return isValid;
         }
 
-        public void GetNewAuthorizationToken(string password, string scopes, string note){
+        public void GetNewAuthorizationToken(string password, List<string> scopes, string note){
             this.Token = this.Client.GetAuthorizationToken(this.Name, password, scopes, note);
             this.Store();
         }
@@ -105,6 +134,18 @@ namespace Terradue.Github {
                     this.Identifier = null;
                 }
             }
+        }
+
+        public List<GithubRepositoryResponse> GetRepositoryForOrganization(string org){
+            List<GithubRepositoryResponse> result = null;
+            result = this.Client.GetRepos(org, this.Token);
+            return result;
+        }
+
+        public List<GithubReleaseResponse> GetReleases(string org, string repo){
+            List<GithubReleaseResponse> result = null;
+            result = this.Client.GetReleases(org, repo, this.Token);
+            return result;
         }
 
     }

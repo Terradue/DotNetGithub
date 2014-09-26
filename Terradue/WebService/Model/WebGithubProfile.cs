@@ -11,9 +11,13 @@ using Terradue.Github;
 namespace Terradue.WebService.Model {
 
     [Route("/github/token", "PUT", Summary = "GET a new token for the user", Notes = "User is current user")]
-    public class GetNewGithubToken : WebGithubProfile, IReturn<WebGithubProfile> {
+    public class GetNewGithubToken : IReturn<WebGithubProfile> {
         [ApiMember(Name = "Password", Description = "User Password", ParameterType = "query", DataType = "string", IsRequired = true)]
         public string Password { get; set; }
+        [ApiMember(Name = "Scope", Description = "Token scope", ParameterType = "query", DataType = "List<string>", IsRequired = true)]
+        public List<string> Scope { get; set; }
+        [ApiMember(Name = "Description", Description = "Token Description", ParameterType = "query", DataType = "string", IsRequired = true)]
+        public string Description { get; set; }
     }
 
     [Route("/github/sshkey", "POST", Summary = "Add a key for the current user", Notes = "User is the current user")]
@@ -27,6 +31,22 @@ namespace Terradue.WebService.Model {
 
     [Route("/github/user", "PUT", Summary = "Update github information about current user", Notes = "User is the current user")]
     public class UpdateGithubUser : WebGithubProfile, IReturn<WebGithubProfile> {}
+
+    [Route("/github/repos/{organization}", "GET", Summary = @"GET a list of repos on github", Notes = "organization is selected from its name")]
+    public class GetGithubRepos : IReturn<List<string>>
+    {
+        [ApiMember(Name="organization", Description = "organization", ParameterType = "query", DataType = "string", IsRequired = true)]
+        public string organization { get; set; }
+    }
+
+    [Route("/github/release/{organization}/{repo}", "GET", Summary = @"GET a list of releases on github", Notes = "organization is selected from its name")]
+    public class GetGithubReleases : IReturn<List<string>>
+    {
+        [ApiMember(Name="organization", Description = "organization", ParameterType = "query", DataType = "string", IsRequired = true)]
+        public string organization { get; set; }
+        [ApiMember(Name="repo", Description = "organization", ParameterType = "query", DataType = "string", IsRequired = true)]
+        public string repo { get; set; }
+    }
 
 
     //-------------------------------------------------------------------------------------------------------------------------
@@ -47,6 +67,9 @@ namespace Terradue.WebService.Model {
         [ApiMember(Name = "Avatar", Description = "Github avatar url", ParameterType = "query", DataType = "String", IsRequired = true)]
         public String Avatar { get; set; }
 
+        [ApiMember(Name = "Token", Description = "Token Description", ParameterType = "query", DataType = "string", IsRequired = true)]
+        public string Token { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Terradue.Metadata.Model.User"/> class.
         /// </summary>
@@ -60,6 +83,7 @@ namespace Terradue.WebService.Model {
             this.Avatar = entity.Avatar;
             this.CertPub = entity.PublicSSHKey;
             this.HasSSHKey = entity.HasSSHKey;
+            this.Token = entity.Token;
         }
 
         /// <summary>
