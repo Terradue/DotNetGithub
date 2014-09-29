@@ -13,22 +13,8 @@ namespace Terradue.Github {
 
     [EntityTable("usr_github", EntityTableConfiguration.Custom, HasAutomaticIds=false, NameField="username")]
     public class GithubProfile : Entity {
-
-        private GithubClient client { get; set; }
-        public GithubClient Client { 
-            get{ 
-                if (client == null) {
-                    client = new GithubClient(context.BaseUrl, 
-                                              context.GetConfigValue("Github-client-name"), 
-                                              context.GetConfigValue("Github-client-id"), 
-                                              context.GetConfigValue("Github-client-secret"));
-                }
-                return client;
-            }
-            set{ 
-                client = value;
-            }
-        } 
+    
+        private GithubClient Client { get; set; } 
 
         [EntityDataField("token")]
         public string Token { get; set; }
@@ -46,11 +32,18 @@ namespace Terradue.Github {
             } 
         }
 
-        public GithubProfile(IfyContext context, int usrid) : base(context) {
+        public GithubProfile(IfyContext context) : base(context) {
+            this.Client = new GithubClient(context.BaseUrl, 
+                                      context.GetConfigValue("Github-client-name"), 
+                                      context.GetConfigValue("Github-client-id"), 
+                                      context.GetConfigValue("Github-client-secret"));
+        }
+
+        public GithubProfile(IfyContext context, int usrid) : this(context) {
             this.Id = usrid;
         }
 
-        public GithubProfile(IfyContext context, string name) : base(context) {
+        public GithubProfile(IfyContext context, string name) : this(context) {
             this.Name = name;
         }
 
@@ -100,14 +93,6 @@ namespace Terradue.Github {
         public void GetNewAuthorizationToken(string password, List<string> scopes, string note){
             this.Token = this.Client.GetAuthorizationToken(this.Name, password, scopes, note);
             this.Store();
-        }
-
-        public void AddSSHKey(){
-            this.Client.AddSshKey("Terradue Certificate", this.PublicSSHKey, this.Token);
-        }
-
-        public void AddSSHKey(string title, string key){
-            this.Client.AddSshKey(title, key, this.Token);
         }
 
         public override void Load(){

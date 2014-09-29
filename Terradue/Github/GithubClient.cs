@@ -3,6 +3,7 @@ using System.Net;
 using System.IO;
 using ServiceStack.Text;
 using System.Collections.Generic;
+using Terradue.Portal;
 
 namespace Terradue.Github {
 
@@ -13,6 +14,11 @@ namespace Terradue.Github {
         private string ClientName { get; set; }
         private string ClientId { get; set; }
         private string ClientSecret { get; set; }
+
+        public GithubClient(IfyContext context) : this(context.BaseUrl, 
+                                                       context.GetConfigValue("Github-client-name"), 
+                                                       context.GetConfigValue("Github-client-id"), 
+                                                       context.GetConfigValue("Github-client-secret")){}
 
         public GithubClient(string baseurl){
             this.BaseUrl = baseurl;

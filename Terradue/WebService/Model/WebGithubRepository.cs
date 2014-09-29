@@ -12,7 +12,7 @@ using Terradue.Github.Reponse;
 namespace Terradue.WebService.Model {
 
     [Route("/github/org/{organization}/repo", "POST", Summary = "Add a repo", Notes = "User is the current user")]
-    public class CreateRepository : WebGithubRepository, IReturn<WebGithubRepository> {
+    public class CreateGithubRepository : WebGithubRepository, IReturn<WebGithubRepository> {
         [ApiMember(Name="organization", Description = "organization", ParameterType = "query", DataType = "string", IsRequired = true)]
         public string organization { get; set; }
     }
@@ -74,7 +74,7 @@ namespace Terradue.WebService.Model {
         /// Initializes a new instance of the <see cref="Terradue.WebService.Model.User"/> class.
         /// </summary>
         /// <param name="entity">Entity.</param>
-        public WebGithubRepository(GithubRepositoryResponse entity) : base(entity) {
+        public WebGithubRepository(GithubRepositoryResponse entity){
             this.Id = entity.id;
             this.Name = entity.name;
             this.Description = entity.description;
