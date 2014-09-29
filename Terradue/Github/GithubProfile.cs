@@ -135,19 +135,6 @@ namespace Terradue.Github {
                 }
             }
         }
-
-        public List<GithubRepositoryResponse> GetRepositoryForOrganization(string org){
-            List<GithubRepositoryResponse> result = null;
-            result = this.Client.GetRepos(org, this.Token);
-            return result;
-        }
-
-        public List<GithubReleaseResponse> GetReleases(string org, string repo){
-            List<GithubReleaseResponse> result = null;
-            result = this.Client.GetReleases(org, repo, this.Token);
-            return result;
-        }
-
     }
 }
 

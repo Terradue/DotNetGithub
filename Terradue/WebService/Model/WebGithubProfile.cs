@@ -32,23 +32,6 @@ namespace Terradue.WebService.Model {
     [Route("/github/user", "PUT", Summary = "Update github information about current user", Notes = "User is the current user")]
     public class UpdateGithubUser : WebGithubProfile, IReturn<WebGithubProfile> {}
 
-    [Route("/github/repos/{organization}", "GET", Summary = @"GET a list of repos on github", Notes = "organization is selected from its name")]
-    public class GetGithubRepos : IReturn<List<string>>
-    {
-        [ApiMember(Name="organization", Description = "organization", ParameterType = "query", DataType = "string", IsRequired = true)]
-        public string organization { get; set; }
-    }
-
-    [Route("/github/release/{organization}/{repo}", "GET", Summary = @"GET a list of releases on github", Notes = "organization is selected from its name")]
-    public class GetGithubReleases : IReturn<List<string>>
-    {
-        [ApiMember(Name="organization", Description = "organization", ParameterType = "query", DataType = "string", IsRequired = true)]
-        public string organization { get; set; }
-        [ApiMember(Name="repo", Description = "organization", ParameterType = "query", DataType = "string", IsRequired = true)]
-        public string repo { get; set; }
-    }
-
-
     //-------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------------------

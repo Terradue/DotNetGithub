@@ -27,6 +27,33 @@ namespace Terradue.Github {
             return repos;
         }
 
+        public GithubRepositoryResponse CreateRepo(string org, GithubRepositoryResponse repo, string token){
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/orgs/" + org + "/repos?access_token=" + token);
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            request.UserAgent = this.ClientName;
+            GithubRepositoryResponse response = null;
+            string json = "{" +
+                "\"name\":\"" + repo.name+"\"," +
+                "\"description\": [" + repo.description + "]," +
+                "\"private\":\"" + repo.Private + "\"" +
+                "}";
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
+                streamWriter.Write(json);
+                streamWriter.Flush();
+                streamWriter.Close();
+
+                var httpResponse = (HttpWebResponse)request.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+                    string result = streamReader.ReadToEnd();
+                    response = JsonSerializer.DeserializeFromString<GithubRepositoryResponse>(result);
+
+                }
+            }
+            return response;
+        }
+
     }
 }
 

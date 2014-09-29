@@ -80,6 +80,7 @@
     <Compile Include="Terradue\Github\Response\GithubOrganizationResponse.cs" />
     <Compile Include="Terradue\Github\Response\GithubReleaseResponse.cs" />
     <Compile Include="Terradue\Github\GithubClient.Release.cs" />
+    <Compile Include="Terradue\WebService\Model\WebGithubRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
