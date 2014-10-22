@@ -110,12 +110,6 @@
     <Folder Include="Terradue\Github\Response\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Terradue.WebService.Model\Terradue.WebService.Model.csproj">
-      <Project>{52346D96-A50D-416C-BA49-361B925418EB}</Project>
-      <Name>Terradue.WebService.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
 </Project>
