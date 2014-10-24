@@ -17,7 +17,10 @@ namespace Terradue.WebService.Model {
     }
 
     [Route("/github/sshkey", "POST", Summary = "Add a key for the current user", Notes = "User is the current user")]
-    public class AddGithubSSHKeyToCurrentUser : IReturn<WebGithubProfile> {}
+    public class AddGithubSSHKeyToCurrentUser : IReturn<WebGithubProfile> {
+        [ApiMember(Name = "sshkey", Description = "User code", ParameterType = "query", DataType = "string", IsRequired = true)]
+        public string SshKey { get; set; }
+    }
 
     [Route("/github/sshkey", "DELETE", Summary = "Add a key for the current user", Notes = "User is the current user")]
     public class DeleteSSHKeyOfCurrentUser : IReturn<WebGithubProfile> {}
