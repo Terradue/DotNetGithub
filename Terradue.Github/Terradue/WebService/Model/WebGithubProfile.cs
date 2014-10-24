@@ -12,12 +12,8 @@ namespace Terradue.WebService.Model {
 
     [Route("/github/token", "PUT", Summary = "GET a new token for the user", Notes = "User is current user")]
     public class GetNewGithubToken : IReturn<WebGithubProfile> {
-        [ApiMember(Name = "Password", Description = "User Password", ParameterType = "query", DataType = "string", IsRequired = true)]
-        public string Password { get; set; }
-        [ApiMember(Name = "Scope", Description = "Token scope", ParameterType = "query", DataType = "List<string>", IsRequired = true)]
-        public List<string> Scope { get; set; }
-        [ApiMember(Name = "Description", Description = "Token Description", ParameterType = "query", DataType = "string", IsRequired = true)]
-        public string Description { get; set; }
+        [ApiMember(Name = "code", Description = "User code", ParameterType = "query", DataType = "string", IsRequired = true)]
+        public string Code { get; set; }
     }
 
     [Route("/github/sshkey", "POST", Summary = "Add a key for the current user", Notes = "User is the current user")]

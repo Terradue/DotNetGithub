@@ -90,8 +90,8 @@ namespace Terradue.Github {
             return isValid;
         }
 
-        public void GetNewAuthorizationToken(string password, List<string> scopes, string note){
-            this.Token = this.Client.GetAuthorizationToken(this.Name, password, scopes, note);
+        public void GetNewAuthorizationToken(string code){
+            this.Token = this.Client.GetAuthorizationToken(this.Name, code);
             this.Store();
         }
 

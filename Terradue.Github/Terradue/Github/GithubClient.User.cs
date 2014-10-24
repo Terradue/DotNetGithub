@@ -18,24 +18,21 @@ namespace Terradue.Github {
         /// <param name="password">Password.</param>
         /// <param name="scopes">Scopes.</param>
         /// <param name="note">Note.</param>
-        public string GetAuthorizationToken(string username, string password, List<string> scopes, string note){
+        public string GetAuthorizationToken(string username, string code){
             if (username == null)
                 throw new Exception("User github name not set");
             string token = null;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/authorizations/clients/" + ClientId);
-            request.Method = "PUT";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://github.com/login/oauth/access_token");
+            request.Method = "POST";
             request.ContentType = "application/json";
+            request.Accept = "application/json";
             request.UserAgent = this.ClientName;
-            request.Headers.Add(HttpRequestHeader.Authorization, "Basic " + Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(username + ":" + password)));
-
-            string scope = "";
-            foreach (string s in scopes) scope += "\"" + s + "\"" + ",";
-            scope = scope.Substring(0, scope.Length - 1); //remove last ,
+            request.Headers.Add(HttpRequestHeader.Authorization, "Basic " + Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(this.ClientId + ":" + this.ClientSecret)));
 
             string json = "{" +
+                "\"client_id\":\"" + ClientId+"\"," +
                 "\"client_secret\":\"" + ClientSecret+"\"," +
-                "\"scopes\": [" + scope + "]," +
-                "\"note\":\"" + note + "\"" +
+                "\"code\": \"" + code + "\"" +
                 "}";
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
@@ -46,8 +43,12 @@ namespace Terradue.Github {
                 var httpResponse = (HttpWebResponse)request.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
                     string result = streamReader.ReadToEnd();
-                    GithubTokenResponse response = JsonSerializer.DeserializeFromString<GithubTokenResponse>(result);
-                    token = response.token;
+                    try{
+                        GithubAccessTokenResponse response = JsonSerializer.DeserializeFromString<GithubAccessTokenResponse>(result);
+                        token = response.access_token;
+                    }catch(Exception e){
+                        throw new Exception(result);
+                    }
                 }
             }
             return token;

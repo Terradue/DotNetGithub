@@ -27,6 +27,16 @@ namespace Terradue.Github.Response {
     }
 
     [DataContract]
+    public class GithubAccessTokenResponse {
+        [DataMember]
+        public string access_token { get; set; }
+        [DataMember]
+        public string scope { get; set; }
+        [DataMember]
+        public string token_type { get; set; }
+    }
+
+    [DataContract]
     public class GithubClientResponse {
         [DataMember]
         public string client_id { get; set; }
