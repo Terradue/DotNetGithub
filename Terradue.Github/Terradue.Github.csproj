@@ -85,7 +85,7 @@
       <HintPath>..\packages\Terradue.Portal.2.5.5\lib\net40\Terradue.Portal.Agent.exe</HintPath>
     </Reference>
     <Reference Include="Terradue.Certification">
-      <HintPath>..\packages\Terradue.Certification.1.4.2\lib\net40\Terradue.Certification.dll</HintPath>
+      <HintPath>..\packages\Terradue.Certification.1.4.3\lib\net40\Terradue.Certification.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
