@@ -124,8 +124,8 @@ namespace Terradue.Github {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.ApiBaseUrl + "/user/keys?access_token=" + token);
             request.Method = "POST";
             request.ContentType = "application/json";
-//            request.Headers.Add("X-OAuth-Scopes", "write:public_key,repo");
-//            request.Headers.Add("X-Accepted-OAuth-Scopes", "write:public_key,repo");
+//            request.Headers.Add("X-OAuth-Scopes", "write:public_key,admin:org,repo");
+//            request.Headers.Add("X-Accepted-OAuth-Scopes", "write:public_key,admin:org,repo");
             request.UserAgent = this.ClientName;
 
             string json = "{\"title\":\""+title+"\",\"key\":\""+key+"\"}";
