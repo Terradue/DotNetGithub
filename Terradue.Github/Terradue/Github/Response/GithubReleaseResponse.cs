@@ -17,7 +17,7 @@ namespace Terradue.Github.Reponse {
         [DataMember]
         public bool prerelease { get; set; }
         [DataMember]
-        public GithubAssets assets { get; set; }
+        public List<GithubAssets> assets { get; set; }
     }
 
     [DataContract]
