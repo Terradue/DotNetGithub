@@ -55,9 +55,13 @@ namespace Terradue.Github {
         }
 
         public static GithubProfile FromId(IfyContext context, int userId){
-            GithubProfile result = new GithubProfile(context, userId);
-            result.Load();
-            return result;
+            try{
+                GithubProfile result = new GithubProfile(context, userId);
+                result.Load();
+                return result;
+            }catch(Exception e){
+                throw new Exception("Github account does not exist for the user.");
+            }
         }
 
         public static GithubProfile FromUsername(IfyContext context, string name) {
