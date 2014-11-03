@@ -63,6 +63,7 @@ namespace Terradue.Github {
                 result.Load();
                 return result;
             }catch(Exception e){
+                context.LogError(typeof(Terradue.Github.GithubProfile), String.Format("{0} : {1}", e.Message, e.StackTrace));
                 throw new Exception("Github account does not exist for the user.");
             }
         }
@@ -104,6 +105,8 @@ namespace Terradue.Github {
         }
 
         public override void Load(){
+            context.LogInfo(this, String.Format("Loading user account: Id={0}",this.Id));
+
             base.Load();
 
             //Public ssh key
@@ -111,12 +114,13 @@ namespace Terradue.Github {
             try{
                 this.PublicSSHKey = cert.PubCertificateContent;
             }catch(Exception e){
+                context.LogError(this, String.Format("{0} : {1}", e.Message, e.StackTrace));
             }
 
             //Github information
             if (this.Name != null) {
+                context.LogInfo(this, String.Format("Loading user account: Name={0}",this.Name));
                 try{
-//                    GithubUserResponse usr = (this.Token != null ? this.Client.GetUser(this.Name, this.Token) : this.Client.GetUser(this.Name));
                     GithubUserResponse usr = this.Client.GetUser(this.Name);
                     this.Identifier = usr.id.ToString();
                     this.Avatar = usr.avatar_url;
@@ -129,6 +133,7 @@ namespace Terradue.Github {
                 }catch(Exception e){
                     this.Avatar = null;
                     this.Identifier = null;
+                    context.LogError(this, String.Format("{0} : {1}", e.Message, e.StackTrace));
                 }
             }
         }
