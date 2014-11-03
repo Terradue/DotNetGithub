@@ -19,6 +19,9 @@ namespace Terradue.Github {
         [EntityDataField("token")]
         public string Token { get; set; }
 
+        [EntityDataField("email")]
+        public string Email { get; set; }
+
         public string Avatar { get; set; }
         public string PublicSSHKey { get; set; }
         public bool HasSSHKey { 
@@ -67,13 +70,14 @@ namespace Terradue.Github {
         public static GithubProfile FromUsername(IfyContext context, string name) {
             GithubProfile result = new GithubProfile(context, name);
             //result.Load();
-            string sql = String.Format("SELECT id, token FROM usr_github WHERE username='{0}';", name);
+            string sql = String.Format("SELECT id, token, email FROM usr_github WHERE username='{0}';", name);
             IDbConnection dbConnection = context.GetDbConnection();
             IDataReader reader = context.GetQueryResult(sql, dbConnection);
 
             if (reader.Read ()) {
                 result.Id = reader.GetInt32(0);
                 result.Token = reader.GetString(1);
+                result.Email = reader.GetString(2);
             }
             context.CloseQueryResult(reader, dbConnection);
             return result;
@@ -112,12 +116,16 @@ namespace Terradue.Github {
             //Github information
             if (this.Name != null) {
                 try{
+//                    GithubUserResponse usr = (this.Token != null ? this.Client.GetUser(this.Name, this.Token) : this.Client.GetUser(this.Name));
                     GithubUserResponse usr = this.Client.GetUser(this.Name);
                     this.Identifier = usr.id.ToString();
                     this.Avatar = usr.avatar_url;
+                    this.Email = usr.email;
                     // ...
                     // we can get more if we want to
 
+                    //we store in case of changes
+                    this.Store();
                 }catch(Exception e){
                     this.Avatar = null;
                     this.Identifier = null;

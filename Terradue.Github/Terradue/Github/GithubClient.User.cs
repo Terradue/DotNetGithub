@@ -142,6 +142,11 @@ namespace Terradue.Github {
             }
         }
 
+        /// <summary>
+        /// Gets the user github profile
+        /// </summary>
+        /// <returns>The user.</returns>
+        /// <param name="githubName">Github name.</param>
         public GithubUserResponse GetUser(string githubName) {
             GithubUserResponse result = new GithubUserResponse();
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/users/" + githubName + "?client_id=" + ClientId + "&client_secret=" + ClientSecret);
