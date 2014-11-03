@@ -16,7 +16,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="Terradue.Certification/bin/Terradue.Certification.dll" target="lib/net40/Terradue.Certification.dll" />
+    <file src="Terradue.Github/bin/Terradue.Github.dll" target="lib/net40/Terradue.Github.dll" />
   </files>
 
 </package>
