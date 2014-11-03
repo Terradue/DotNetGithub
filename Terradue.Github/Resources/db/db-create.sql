@@ -9,6 +9,7 @@ CREATE TABLE usr_github (
     id int unsigned NOT NULL,
     username varchar(50) COMMENT 'Username on github',
 	token varchar(50) COMMENT 'Token to access github',
+	email varchar(50) COMMENT 'User email on github',
 	CONSTRAINT pk_usrgithub PRIMARY KEY (id),
 	CONSTRAINT u_usrgithub UNIQUE (id),
     CONSTRAINT fk_usrgithub_usr FOREIGN KEY (id) REFERENCES usr(id) ON DELETE CASCADE
