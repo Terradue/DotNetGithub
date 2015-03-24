@@ -109,14 +109,6 @@ namespace Terradue.Github {
 
             base.Load();
 
-            //Public ssh key
-            CertificateUser cert = CertificateUser.FromId(context, this.Id);
-            try{
-                this.PublicSSHKey = cert.PubCertificateContent;
-            }catch(Exception e){
-                context.LogError(this, String.Format("{0} : {1}", e.Message, e.StackTrace));
-            }
-
             //Github information
             if (this.Name != null) {
                 context.LogInfo(this, String.Format("Loading user account: Name={0}",this.Name));
@@ -135,6 +127,31 @@ namespace Terradue.Github {
                     this.Identifier = null;
                     context.LogError(this, String.Format("{0} : {1}", e.Message, e.StackTrace));
                 }
+            }
+        }
+
+        /// <summary>
+        /// Loads the public key from certificate.
+        /// </summary>
+        public void LoadPublicKeyFromCertificate(){
+            //Public ssh key
+            CertificateUser cert = CertificateUser.FromId(context, this.Id);
+            try{
+                this.PublicSSHKey = cert.PubCertificateContent;
+            }catch(Exception e){
+                context.LogError(this, String.Format("{0} : {1}", e.Message, e.StackTrace));
+            }
+        }
+
+        /// <summary>
+        /// Loads the public key from safe.
+        /// </summary>
+        public void LoadPublicKeyFromSafe(){
+            Safe safe = Safe.FromUserId(context, this.UserId);
+            try{
+                this.PublicSSHKey = safe.GetBase64SSHPublicKey();
+            }catch(Exception e){
+                context.LogError(this, String.Format("{0} : {1}", e.Message, e.StackTrace));
             }
         }
     }
