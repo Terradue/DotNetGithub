@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.IO;
 using ServiceStack.Text;
-using Terradue.Github.Reponse;
 
 namespace Terradue.Github {
     public partial class GithubClient {

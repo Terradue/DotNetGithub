@@ -3,8 +3,6 @@ using System.Net;
 using System.IO;
 using ServiceStack.Text;
 using System.Collections.Generic;
-using Terradue.Github.Response;
-using Terradue.Github.Reponse;
 
 namespace Terradue.Github {
 
@@ -29,11 +27,12 @@ namespace Terradue.Github {
             request.UserAgent = this.ClientName;
             request.Headers.Add(HttpRequestHeader.Authorization, "Basic " + Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(this.ClientId + ":" + this.ClientSecret)));
 
-            string json = "{" +
-                "\"client_id\":\"" + ClientId+"\"," +
-                "\"client_secret\":\"" + ClientSecret+"\"," +
-                "\"code\": \"" + code + "\"" +
-                "}";
+            GithubTokenRequest gRequest = new GithubTokenRequest();
+            gRequest.client_id = ClientId;
+            gRequest.client_secret = ClientSecret;
+            gRequest.code = code;
+
+            string json = JsonSerializer.SerializeToString<GithubTokenRequest>(gRequest);
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
                 streamWriter.Write(json);
@@ -81,7 +80,12 @@ namespace Terradue.Github {
             }
             return isValid;
         }
-            
+         
+        /// <summary>
+        /// Gets the SSH keys private.
+        /// </summary>
+        /// <returns>The SSH keys private.</returns>
+        /// <param name="token">Token.</param>
         public List<GithubKeyResponse> GetSSHKeysPrivate(string token){
             List<GithubKeyResponse> result = new List<GithubKeyResponse>();
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/user/keys?access_token=" + token);
@@ -97,6 +101,11 @@ namespace Terradue.Github {
             return result;
         }
 
+        /// <summary>
+        /// Gets the SSH keys public.
+        /// </summary>
+        /// <returns>The SSH keys public.</returns>
+        /// <param name="username">Username.</param>
         public List<GithubKeyResponse> GetSSHKeysPublic(string username){
             List<GithubKeyResponse> result = new List<GithubKeyResponse>();
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/users/" + username + "/keys" + "?client_id=" + ClientId + "&client_secret=" + ClientSecret);
@@ -112,6 +121,13 @@ namespace Terradue.Github {
             return result;
         }
 
+        /// <summary>
+        /// Determines whether this user has the ssh key registered on its github profile
+        /// </summary>
+        /// <returns><c>true</c> if this instance has key the specified key token username; otherwise, <c>false</c>.</returns>
+        /// <param name="key">Key.</param>
+        /// <param name="token">Token.</param>
+        /// <param name="username">Username.</param>
         public bool HasKey(string key, string token, string username){
             List<GithubKeyResponse> result;
             result = GetSSHKeysPublic(username);
@@ -120,15 +136,23 @@ namespace Terradue.Github {
             return false;
         }
 
+        /// <summary>
+        /// Adds the ssh key.
+        /// </summary>
+        /// <param name="title">Title.</param>
+        /// <param name="key">Key.</param>
+        /// <param name="token">Token.</param>
         public void AddSshKey(string title, string key, string token){
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.ApiBaseUrl + "/user/keys?access_token=" + token);
             request.Method = "POST";
             request.ContentType = "application/json";
-//            request.Headers.Add("X-OAuth-Scopes", "write:public_key,admin:org,repo");
-//            request.Headers.Add("X-Accepted-OAuth-Scopes", "write:public_key,admin:org,repo");
             request.UserAgent = this.ClientName;
 
-            string json = "{\"title\":\""+title+"\",\"key\":\""+key+"\"}";
+            GithubKeyRequest gRequest = new GithubKeyRequest();
+            gRequest.title = title;
+            gRequest.key = key;
+
+            string json = JsonSerializer.SerializeToString<GithubKeyRequest>(gRequest);
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
                 streamWriter.Write(json);
