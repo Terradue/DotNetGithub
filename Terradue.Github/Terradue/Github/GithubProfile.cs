@@ -6,7 +6,6 @@ using ServiceStack.Text;
 using Terradue.Portal;
 using Terradue.Security.Certification;
 using System.Collections.Generic;
-using Terradue.Github.Reponse;
 using System.Data;
 
 namespace Terradue.Github {

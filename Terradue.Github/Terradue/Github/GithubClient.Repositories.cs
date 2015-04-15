@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.IO;
 using ServiceStack.Text;
-using Terradue.Github.Reponse;
 
 namespace Terradue.Github {
     public partial class GithubClient {
@@ -32,12 +31,14 @@ namespace Terradue.Github {
             request.Method = "POST";
             request.ContentType = "application/json";
             request.UserAgent = this.ClientName;
-            GithubRepositoryResponse response = null;
-            string json = "{" +
-                "\"name\":\"" + repo.name+"\"," +
-                "\"description\": [" + repo.description + "]," +
-                "\"private\":\"" + repo.Private + "\"" +
-                "}";
+
+            GithubRepositoryResponse gResponse = null;
+            GithubRepositoryRequest gRequest = new GithubRepositoryRequest();
+            gRequest.name = repo.name;
+            gRequest.description = repo.description;
+            gRequest.Private = repo.Private;
+
+            string json = JsonSerializer.SerializeToString<GithubRepositoryRequest>(gRequest);
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
                 streamWriter.Write(json);
@@ -47,13 +48,15 @@ namespace Terradue.Github {
                 var httpResponse = (HttpWebResponse)request.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
                     string result = streamReader.ReadToEnd();
-                    response = JsonSerializer.DeserializeFromString<GithubRepositoryResponse>(result);
+                    gResponse = JsonSerializer.DeserializeFromString<GithubRepositoryResponse>(result);
 
                 }
             }
-            return response;
+            return gResponse;
         }
 
     }
+
+
 }
 

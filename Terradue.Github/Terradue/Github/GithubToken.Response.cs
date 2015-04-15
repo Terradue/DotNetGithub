@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 
-namespace Terradue.Github.Response {
+namespace Terradue.Github {
 
     [DataContract]
     public class GithubTokenResponse {
@@ -27,16 +27,6 @@ namespace Terradue.Github.Response {
     }
 
     [DataContract]
-    public class GithubAccessTokenResponse {
-        [DataMember]
-        public string access_token { get; set; }
-        [DataMember]
-        public string scope { get; set; }
-        [DataMember]
-        public string token_type { get; set; }
-    }
-
-    [DataContract]
     public class GithubClientResponse {
         [DataMember]
         public string client_id { get; set; }
@@ -46,18 +36,15 @@ namespace Terradue.Github.Response {
         public string url { get; set; }
     }
 
+
     [DataContract]
-    public class GithubKeyResponse {
+    public class GithubAccessTokenResponse {
         [DataMember]
-        public int id { get; set; }
+        public string access_token { get; set; }
         [DataMember]
-        public string key { get; set; }
+        public string scope { get; set; }
         [DataMember]
-        public string url { get; set; }
-        [DataMember]
-        public string title { get; set; }
-        [DataMember]
-        public string verified { get; set; }
+        public string token_type { get; set; }
     }
 
 }

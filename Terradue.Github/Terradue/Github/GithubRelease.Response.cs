@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 
-namespace Terradue.Github.Reponse {
+namespace Terradue.Github {
 
     [DataContract]
     public class GithubReleaseResponse {
