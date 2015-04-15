@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Terradue.Github</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <title>Terradue.Github</title>
     <authors>Terradue</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,6 +11,7 @@
     <dependencies>
       <dependency id="ServiceStack.Text" version="3.9.71" />
       <dependency id="Terradue.Portal" version="[2.6,2.7)" />
+      <dependency id="log4net" version="[2.0.0,)" />
     </dependencies>
   </metadata>
   <files>
