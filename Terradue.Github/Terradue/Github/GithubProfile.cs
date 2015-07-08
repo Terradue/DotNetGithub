@@ -8,6 +8,29 @@ using Terradue.Security.Certification;
 using System.Collections.Generic;
 using System.Data;
 
+
+/*! 
+\defgroup GithubProfile GithubProfile
+@{
+
+This component defines a the github profile of a user. It is used to link the user profile to his Github account, and also stores user tokens to enable authentication.
+
+\ingroup User
+
+\xrefitem dep "Dependencies" "Dependencies" calls \ref Persistence to store the object (for ex in a Mysql database)
+
+\startuml
+TODO: sequence diagram
+
+footer
+GeoHazards TEP User account activity diagram
+(c) Terradue Srl
+endfooter
+\enduml
+
+@}
+*/
+
 namespace Terradue.Github {
 
     [EntityTable("usr_github", EntityTableConfiguration.Custom, HasAutomaticIds=false, NameField="username")]
