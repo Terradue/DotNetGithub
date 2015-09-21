@@ -18,9 +18,12 @@ using Terradue.Portal;
 \defgroup GithubClient GithubClient
 @{
 
+\ingroup "Community"
 
-    Github Client makes requests to the interface exposed by Github platform.
-    It performs all requests related to Users, Authentication, Repositories, Releases.
+Github Client makes requests to the interface exposed by Github platform.
+It performs all requests related to Users, Authentication, Repositories, Releases.
+
+\xrefitem api "API" "API" [GitHub API v3](https://developer.github.com/v3/)
 
 @}
 */

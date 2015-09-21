@@ -15,18 +15,11 @@ using System.Data;
 
 This component defines a the github profile of a user. It is used to link the user profile to his Github account, and also stores user tokens to enable authentication.
 
-\ingroup User
+\ingroup Community
 
-\xrefitem dep "Dependencies" "Dependencies" calls \ref Persistence to store the object (for ex in a Mysql database)
+\xrefitem dep "Dependencies" "Dependencies" calls \ref Persistence to store the references and access token to the profile
 
-\startuml
-TODO: sequence diagram
-
-footer
-GeoHazards TEP User account activity diagram
-(c) Terradue Srl
-endfooter
-\enduml
+\xrefitem dep "Dependencies" "Dependencies" uses \ref GithubClient to perform operations to the API.
 
 @}
 */
