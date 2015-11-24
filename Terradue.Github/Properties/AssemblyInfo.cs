@@ -5,8 +5,8 @@ using System.Runtime.CompilerServices;
 
 \namespace Terradue.Github
 @{
-    Terradue.Github Software Package
-
+    Terradue.Github is a .Net library that provide an extension to Terradue.Portal to enable a Github account into a user profile with several associated functions.
+    
     \xrefitem sw_version "Versions" "Software Package Version" 1.0.4
 
     \xrefitem sw_link "Links" "Software Package List" [Terradue.Github](https://git.terradue.com/sugar/terradue-github)
