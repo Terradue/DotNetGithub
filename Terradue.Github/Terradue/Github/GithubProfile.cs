@@ -4,9 +4,24 @@ using System.IO;
 using System.Web;
 using ServiceStack.Text;
 using Terradue.Portal;
-using Terradue.Security.Certification;
 using System.Collections.Generic;
 using System.Data;
+
+
+/*! 
+\defgroup GithubProfile GithubProfile
+@{
+
+This component defines a the github profile of a user. It is used to link the user profile to his Github account, and also stores user tokens to enable authentication.
+
+\ingroup Community
+
+\xrefitem dep "Dependencies" "Dependencies" calls \ref Persistence to store the references and access token to the profile
+
+\xrefitem dep "Dependencies" "Dependencies" uses \ref GithubClient to perform operations to the API.
+
+@}
+*/
 
 namespace Terradue.Github {
 
@@ -130,27 +145,23 @@ namespace Terradue.Github {
         }
 
         /// <summary>
-        /// Loads the public key from certificate.
-        /// </summary>
-        public void LoadPublicKeyFromCertificate(){
-            //Public ssh key
-            CertificateUser cert = CertificateUser.FromId(context, this.Id);
-            try{
-                this.PublicSSHKey = cert.PubCertificateContent;
-            }catch(Exception e){
-                context.LogError(this, String.Format("{0} : {1}", e.Message, e.StackTrace));
-            }
-        }
-
-        /// <summary>
         /// Loads the public key from safe.
         /// </summary>
-        public void LoadPublicKeyFromSafe(){
-            Safe safe = Safe.FromUserId(context, this.UserId);
-            try{
-                this.PublicSSHKey = safe.GetBase64SSHPublicKey();
-            }catch(Exception e){
-                context.LogError(this, String.Format("{0} : {1}", e.Message, e.StackTrace));
+        public void LoadPublicKeyFromTerradue(string username){
+            var url = string.Format("{0}?token={1}&username={2}&request=sshPublicKey",
+                                    context.GetConfigValue("t2portal-usrinfo-endpoint"),
+                                    context.GetConfigValue("t2portal-safe-token"),
+                                    username);
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+            request.ContentType = "application/json";
+            request.Accept = "application/json";
+
+            var httpResponse = (HttpWebResponse)request.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+                this.PublicSSHKey = streamReader.ReadToEnd();
+                this.PublicSSHKey = this.PublicSSHKey.Replace("\"", "");
             }
         }
     }

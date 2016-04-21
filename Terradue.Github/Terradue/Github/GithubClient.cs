@@ -1,9 +1,33 @@
-﻿using System;
+﻿//
+//  GithubClient.cs
+//
+//  Author:
+//       Enguerran Boissier <enguerran.boissier@terradue.com>
+//
+//  Copyright (c) 2014 Terradue
+
+using System;
 using System.Net;
 using System.IO;
 using ServiceStack.Text;
 using System.Collections.Generic;
 using Terradue.Portal;
+
+/*!
+
+\defgroup GithubClient GithubClient
+@{
+
+\ingroup "Community"
+
+Github Client makes requests to the interface exposed by Github platform.
+It performs all requests related to Users, Authentication, Repositories, Releases.
+
+\xrefitem api "API" "API" [GitHub API v3](https://developer.github.com/v3/)
+
+@}
+*/
+
 
 namespace Terradue.Github {
 
