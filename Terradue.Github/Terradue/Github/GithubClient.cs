@@ -54,6 +54,17 @@ namespace Terradue.Github {
             ClientId = clientid;           
             ClientSecret = clientsecret;
         }
+
+        public HttpWebRequest CreateWebRequest (string url, string method) { 
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create (url);
+            request.Method = method;
+            request.ContentType = "application/json";
+            request.UserAgent = this.ClientName;
+
+            return request;
+        }
     }
 }
 
