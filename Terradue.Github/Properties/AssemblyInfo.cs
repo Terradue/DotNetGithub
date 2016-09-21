@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 @{
     Terradue.Github is a .Net library that provide an extension to Terradue.Portal to enable a Github account into a user profile with several associated functions.
     
-    \xrefitem sw_version "Versions" "Software Package Version" 1.0.5
+    \xrefitem sw_version "Versions" "Software Package Version" 1.0.6
 
     \xrefitem sw_link "Links" "Software Package List" [Terradue.Github](https://git.terradue.com/sugar/terradue-github)
 
@@ -32,8 +32,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright ("Terradue")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
-[assembly: AssemblyVersion ("1.0.5.*")]
-[assembly: AssemblyInformationalVersion ("1.0.5")]
+[assembly: AssemblyVersion ("1.0.6.*")]
+[assembly: AssemblyInformationalVersion ("1.0.6")]
 // The following attributes are used to specify the signing key for the assembly,
 // if desired. See the Mono documentation for more information about signing.
 //[assembly: AssemblyDelaySign(false)]
