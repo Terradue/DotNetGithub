@@ -22,20 +22,21 @@ using System.Runtime.CompilerServices;
 
 */
 
-// Information about this assembly is defined by the following attributes.
-// Change them to the values specific to your project.
-[assembly: AssemblyTitle ("Terradue.Github")]
-[assembly: AssemblyDescription ("Terradue .Net Github Module Library")]
-[assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("Terradue")]
-[assembly: AssemblyProduct ("Terradue.Github")]
-[assembly: AssemblyCopyright ("Terradue")]
-[assembly: AssemblyTrademark ("")]
-[assembly: AssemblyCulture ("")]
-[assembly: AssemblyVersion ("1.0.6.*")]
-[assembly: AssemblyInformationalVersion ("1.0.6")]
-// The following attributes are used to specify the signing key for the assembly,
-// if desired. See the Mono documentation for more information about signing.
-//[assembly: AssemblyDelaySign(false)]
-//[assembly: AssemblyKeyFile("")]
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using NuGet4Mono.Extensions;
 
+[assembly: AssemblyTitle("Terradue.Github")]
+[assembly: AssemblyDescription("Terradue Github .Net library")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Terradue")]
+[assembly: AssemblyProduct("Terradue.Github")]
+[assembly: AssemblyCopyright("Terradue")]
+[assembly: AssemblyAuthors("Enguerran Boissier")]
+[assembly: AssemblyProjectUrl("https://git.terradue.com/sugar/terradue-github")]
+[assembly: AssemblyLicenseUrl("")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+[assembly: AssemblyVersion("1.0.6")]
+[assembly: AssemblyInformationalVersion("1.0.6")]
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
