@@ -20,11 +20,8 @@ namespace Terradue.Github {
             if (username == null)
                 throw new Exception("User github name not set");
             string token = null;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://github.com/login/oauth/access_token");
-            request.Method = "POST";
-            request.ContentType = "application/json";
+            HttpWebRequest request = CreateWebRequest ("https://github.com/login/oauth/access_token", "POST");
             request.Accept = "application/json";
-            request.UserAgent = this.ClientName;
             request.Headers.Add(HttpRequestHeader.Authorization, "Basic " + Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(this.ClientId + ":" + this.ClientSecret)));
 
             GithubTokenRequest gRequest = new GithubTokenRequest();
@@ -39,14 +36,15 @@ namespace Terradue.Github {
                 streamWriter.Flush();
                 streamWriter.Close();
 
-                var httpResponse = (HttpWebResponse)request.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-                    string result = streamReader.ReadToEnd();
-                    try{
-                        GithubAccessTokenResponse response = JsonSerializer.DeserializeFromString<GithubAccessTokenResponse>(result);
-                        token = response.access_token;
-                    }catch(Exception e){
-                        throw new Exception(result);
+                using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
+                    using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
+                        string result = streamReader.ReadToEnd ();
+                        try {
+                            GithubAccessTokenResponse response = JsonSerializer.DeserializeFromString<GithubAccessTokenResponse> (result);
+                            token = response.access_token;
+                        } catch (Exception e) {
+                            throw new Exception (result);
+                        }
                     }
                 }
             }
@@ -62,18 +60,16 @@ namespace Terradue.Github {
             if (token == null) return false;
 
             bool isValid = false;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/applications/" + ClientId + "/tokens/" + token);
-            request.Method = "GET";
-            request.ContentType = "application/json";
-            request.UserAgent = this.ClientName;
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/applications/" + ClientId + "/tokens/" + token, "GET");
             request.Headers.Add(HttpRequestHeader.Authorization, "Basic " + Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(this.ClientId + ":" + this.ClientSecret)));
 
             try{
-                var httpResponse = (HttpWebResponse)request.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-                    string result = streamReader.ReadToEnd();
-                    GithubTokenResponse response = JsonSerializer.DeserializeFromString<GithubTokenResponse>(result);
-                    isValid = (token.Equals(response.token));
+                using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
+                    using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
+                        string result = streamReader.ReadToEnd ();
+                        GithubTokenResponse response = JsonSerializer.DeserializeFromString<GithubTokenResponse> (result);
+                        isValid = (token.Equals (response.token));
+                    }
                 }
             }catch(Exception){
                 return false;
@@ -88,15 +84,13 @@ namespace Terradue.Github {
         /// <param name="token">Token.</param>
         public List<GithubKeyResponse> GetSSHKeysPrivate(string token){
             List<GithubKeyResponse> result = new List<GithubKeyResponse>();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/user/keys?access_token=" + token);
-            request.Method = "GET";
-            request.ContentType = "application/json";
-            request.UserAgent = this.ClientName;
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/user/keys?access_token=" + token, "GET");
 
-            var httpResponse = (HttpWebResponse)request.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-                string json = streamReader.ReadToEnd();
-                result = JsonSerializer.DeserializeFromString<List<GithubKeyResponse>>(json);
+            using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
+                using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
+                    string json = streamReader.ReadToEnd ();
+                    result = JsonSerializer.DeserializeFromString<List<GithubKeyResponse>> (json);
+                }
             }
             return result;
         }
@@ -108,15 +102,13 @@ namespace Terradue.Github {
         /// <param name="username">Username.</param>
         public List<GithubKeyResponse> GetSSHKeysPublic(string username){
             List<GithubKeyResponse> result = new List<GithubKeyResponse>();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/users/" + username + "/keys" + "?client_id=" + ClientId + "&client_secret=" + ClientSecret);
-            request.Method = "GET";
-            request.ContentType = "application/json";
-            request.UserAgent = this.ClientName;
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/users/" + username + "/keys" + "?client_id=" + ClientId + "&client_secret=" + ClientSecret, "GET");
 
-            var httpResponse = (HttpWebResponse)request.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-                string json = streamReader.ReadToEnd();
-                result = JsonSerializer.DeserializeFromString<List<GithubKeyResponse>>(json);
+            using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
+                using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
+                    string json = streamReader.ReadToEnd ();
+                    result = JsonSerializer.DeserializeFromString<List<GithubKeyResponse>> (json);
+                }
             }
             return result;
         }
@@ -143,10 +135,7 @@ namespace Terradue.Github {
         /// <param name="key">Key.</param>
         /// <param name="token">Token.</param>
         public void AddSshKey(string title, string key, string token){
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.ApiBaseUrl + "/user/keys?access_token=" + token);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            request.UserAgent = this.ClientName;
+            HttpWebRequest request = CreateWebRequest (this.ApiBaseUrl + "/user/keys?access_token=" + token, "POST");
 
             GithubKeyRequest gRequest = new GithubKeyRequest();
             gRequest.title = title;
@@ -159,9 +148,10 @@ namespace Terradue.Github {
                 streamWriter.Flush();
                 streamWriter.Close();
 
-                var httpResponse = (HttpWebResponse)request.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-                    string result = streamReader.ReadToEnd();
+                using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
+                    using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
+                        string result = streamReader.ReadToEnd ();
+                    }
                 }
             }
         }
@@ -173,15 +163,13 @@ namespace Terradue.Github {
         /// <param name="githubName">Github name.</param>
         public GithubUserResponse GetUser(string githubName) {
             GithubUserResponse result = new GithubUserResponse();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/users/" + githubName + "?client_id=" + ClientId + "&client_secret=" + ClientSecret);
-            request.Method = "GET";
-            request.ContentType = "application/json";
-            request.UserAgent = this.ClientName;
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/users/" + githubName + "?client_id=" + ClientId + "&client_secret=" + ClientSecret, "GET");
 
-            var httpResponse = (HttpWebResponse)request.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-                string json = streamReader.ReadToEnd();
-                result = JsonSerializer.DeserializeFromString<GithubUserResponse>(json);
+            using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
+                using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
+                    string json = streamReader.ReadToEnd ();
+                    result = JsonSerializer.DeserializeFromString<GithubUserResponse> (json);
+                }
             }
             return result;
         }

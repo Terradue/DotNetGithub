@@ -158,10 +158,11 @@ namespace Terradue.Github {
             request.ContentType = "application/json";
             request.Accept = "application/json";
 
-            var httpResponse = (HttpWebResponse)request.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-                this.PublicSSHKey = streamReader.ReadToEnd();
-                this.PublicSSHKey = this.PublicSSHKey.Replace("\"", "");
+            using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
+                using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
+                    this.PublicSSHKey = streamReader.ReadToEnd ();
+                    this.PublicSSHKey = this.PublicSSHKey.Replace ("\"", "");
+                }
             }
         }
     }

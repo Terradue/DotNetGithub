@@ -9,16 +9,14 @@ namespace Terradue.Github {
 
         public List<GithubRepositoryResponse> GetRepos(string org, string token){
             List<GithubRepositoryResponse> repos = new List<GithubRepositoryResponse>();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/orgs/" + org + "/repos?access_token=" + token);
-            request.Method = "GET";
-            request.ContentType = "application/json";
-            request.UserAgent = this.ClientName;
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/orgs/" + org + "/repos?access_token=" + token, "GET");
 
             try{
-                var httpResponse = (HttpWebResponse)request.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-                    string result = streamReader.ReadToEnd();
-                    repos = JsonSerializer.DeserializeFromString<List<GithubRepositoryResponse>>(result);
+                using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
+                    using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
+                        string result = streamReader.ReadToEnd ();
+                        repos = JsonSerializer.DeserializeFromString<List<GithubRepositoryResponse>> (result);
+                    }
                 }
             }catch(Exception e){
                 throw e;
@@ -27,10 +25,7 @@ namespace Terradue.Github {
         }
 
         public GithubRepositoryResponse CreateRepo(string org, GithubRepositoryResponse repo, string token){
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiBaseUrl + "/orgs/" + org + "/repos?access_token=" + token);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            request.UserAgent = this.ClientName;
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/orgs/" + org + "/repos?access_token=" + token, "POST");
 
             GithubRepositoryResponse gResponse = null;
             GithubRepositoryRequest gRequest = new GithubRepositoryRequest();
@@ -45,11 +40,11 @@ namespace Terradue.Github {
                 streamWriter.Flush();
                 streamWriter.Close();
 
-                var httpResponse = (HttpWebResponse)request.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
-                    string result = streamReader.ReadToEnd();
-                    gResponse = JsonSerializer.DeserializeFromString<GithubRepositoryResponse>(result);
-
+                using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
+                    using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
+                        string result = streamReader.ReadToEnd ();
+                        gResponse = JsonSerializer.DeserializeFromString<GithubRepositoryResponse> (result);
+                    }
                 }
             }
             return gResponse;
