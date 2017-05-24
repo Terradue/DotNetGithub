@@ -64,11 +64,9 @@ namespace Terradue.Github {
             this.Name = name;
         }
 
-        public override string AlternativeIdentifyingCondition{
-            get { 
-                if (Name != null) return String.Format("t.username='{0}'",Name); 
-                return null;
-            }
+        public override string GetIdentifyingConditionSql(){
+            if (Name != null) return String.Format("t.username='{0}'",Name); 
+            return null;
         }
 
         public static GithubProfile FromId(IfyContext context, int userId){
