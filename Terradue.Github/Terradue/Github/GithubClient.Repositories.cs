@@ -50,6 +50,23 @@ namespace Terradue.Github {
             return gResponse;
         }
 
+        public List<GithubUserResponse> GetRepoCollaborators(string org, string repo, string token) {
+            List<GithubUserResponse> repos = new List<GithubUserResponse>();
+            HttpWebRequest request = CreateWebRequest(ApiBaseUrl + "/repos/" + org + "/" + repo + "/collaborators?access_token=" + token, "GET");
+
+            try {
+                using (var httpResponse = (HttpWebResponse)request.GetResponse()) {
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+                        string result = streamReader.ReadToEnd();
+                        repos = JsonSerializer.DeserializeFromString<List<GithubUserResponse>>(result);
+                    }
+                }
+            } catch (Exception e) {
+                throw e;
+            }
+            return repos;
+        }
+
     }
 
 
