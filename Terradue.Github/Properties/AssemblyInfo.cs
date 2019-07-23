@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 @{
     Terradue.Github is a .Net library that provide an extension to Terradue.Portal to enable a Github account into a user profile with several associated functions.
     
-    \xrefitem sw_version "Versions" "Software Package Version" 1.1
+    \xrefitem sw_version "Versions" "Software Package Version" 1.1.1
 
     \xrefitem sw_link "Links" "Software Package List" [Terradue.Github](https://git.terradue.com/sugar/terradue-github)
 
@@ -37,6 +37,6 @@ using NuGet4Mono.Extensions;
 [assembly: AssemblyLicenseUrl("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("1.1")]
-[assembly: AssemblyInformationalVersion("1.1")]
+[assembly: AssemblyVersion("1.1.1")]
+[assembly: AssemblyInformationalVersion("1.1.1")]
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
