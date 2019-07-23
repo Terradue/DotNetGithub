@@ -23,7 +23,7 @@ pipeline {
     }
     stage('Package') {
       steps {
-        sh "nuget4mono -g origin/${env.BRANCH_NAME} -p ${workspace}/Terradue.Github/packages.config ${workspace}/Terradue.Github/bin/Terradue.Github.dll ${workspace}/core/**/*,/content/core"
+        sh "nuget4mono -g origin/${env.BRANCH_NAME} -p ${workspace}/Terradue.Github/packages.config ${workspace}/Terradue.Github/bin/Terradue.Github.dll ${workspace}/Terradue.Github/Resources/**/*,/content/modules/github"
         sh 'cat *.nuspec'
         sh 'nuget pack -OutputDirectory build'
         sh "echo ${params.NUGET_PUBLISH}"           
