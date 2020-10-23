@@ -7,9 +7,9 @@ using ServiceStack.Text;
 namespace Terradue.Github {
     public partial class GithubClient {
 
-        public List<GithubRepositoryResponse> GetRepos(string org, string token){
+        public List<GithubRepositoryResponse> GetRepos(string org){
             List<GithubRepositoryResponse> repos = new List<GithubRepositoryResponse>();
-            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/orgs/" + org + "/repos?access_token=" + token, "GET");
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/orgs/" + org + "/repos", "GET");
 
             try{
                 using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
@@ -24,8 +24,8 @@ namespace Terradue.Github {
             return repos;
         }
 
-        public GithubRepositoryResponse CreateRepo(string org, GithubRepositoryResponse repo, string token){
-            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/orgs/" + org + "/repos?access_token=" + token, "POST");
+        public GithubRepositoryResponse CreateRepo(string org, GithubRepositoryResponse repo){
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/orgs/" + org + "/repos", "POST");
 
             GithubRepositoryResponse gResponse = null;
             GithubRepositoryRequest gRequest = new GithubRepositoryRequest();
@@ -50,9 +50,9 @@ namespace Terradue.Github {
             return gResponse;
         }
 
-        public List<GithubUserResponse> GetRepoCollaborators(string org, string repo, string token) {
+        public List<GithubUserResponse> GetRepoCollaborators(string org, string repo) {
             List<GithubUserResponse> repos = new List<GithubUserResponse>();
-            HttpWebRequest request = CreateWebRequest(ApiBaseUrl + "/repos/" + org + "/" + repo + "/collaborators?access_token=" + token, "GET");
+            HttpWebRequest request = CreateWebRequest(ApiBaseUrl + "/repos/" + org + "/" + repo + "/collaborators", "GET");
 
             try {
                 using (var httpResponse = (HttpWebResponse)request.GetResponse()) {

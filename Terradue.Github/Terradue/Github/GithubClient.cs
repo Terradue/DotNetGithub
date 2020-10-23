@@ -12,6 +12,7 @@ using System.IO;
 using ServiceStack.Text;
 using System.Collections.Generic;
 using Terradue.Portal;
+using System.Text;
 
 /*!
 
@@ -55,13 +56,22 @@ namespace Terradue.Github {
             ClientSecret = clientsecret;
         }
 
-        public HttpWebRequest CreateWebRequest (string url, string method) { 
+        protected string GetBasicAuthenticationSecret(string username, string password) {
+            return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(username + ":" + password));
+        }
+
+        public HttpWebRequest CreateWebRequest(string url, string method) {
+            return CreateWebRequest(url, method, this.ClientId, this.ClientSecret);
+        }
+
+        public HttpWebRequest CreateWebRequest (string url, string method, string username, string password) { 
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create (url);
             request.Method = method;
             request.ContentType = "application/json";
             request.UserAgent = this.ClientName;
+            if(!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password)) request.Headers.Add(HttpRequestHeader.Authorization, GetBasicAuthenticationSecret(username,password));
 
             return request;
         }

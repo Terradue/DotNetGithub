@@ -22,7 +22,6 @@ namespace Terradue.Github {
             string token = null;
             HttpWebRequest request = CreateWebRequest ("https://github.com/login/oauth/access_token", "POST");
             request.Accept = "application/json";
-            request.Headers.Add(HttpRequestHeader.Authorization, "Basic " + Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(this.ClientId + ":" + this.ClientSecret)));
 
             GithubTokenRequest gRequest = new GithubTokenRequest();
             gRequest.client_id = ClientId;
@@ -61,7 +60,6 @@ namespace Terradue.Github {
 
             bool isValid = false;
             HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/applications/" + ClientId + "/tokens/" + token, "GET");
-            request.Headers.Add(HttpRequestHeader.Authorization, "Basic " + Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(this.ClientId + ":" + this.ClientSecret)));
 
             try{
                 using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
@@ -82,9 +80,9 @@ namespace Terradue.Github {
         /// </summary>
         /// <returns>The SSH keys private.</returns>
         /// <param name="token">Token.</param>
-        public List<GithubKeyResponse> GetSSHKeysPrivate(string token){
+        public List<GithubKeyResponse> GetSSHKeysPrivate(){
             List<GithubKeyResponse> result = new List<GithubKeyResponse>();
-            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/user/keys?access_token=" + token, "GET");
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/user/keys", "GET");
 
             using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
                 using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
@@ -100,9 +98,9 @@ namespace Terradue.Github {
         /// </summary>
         /// <returns>The SSH keys public.</returns>
         /// <param name="username">Username.</param>
-        public List<GithubKeyResponse> GetSSHKeysPublic(string username){
+        public List<GithubKeyResponse> GetSSHKeysPublic(string username, string token){
             List<GithubKeyResponse> result = new List<GithubKeyResponse>();
-            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/users/" + username + "/keys" + "?client_id=" + ClientId + "&client_secret=" + ClientSecret, "GET");
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/users/" + username + "/keys", "GET", username, token);
 
             using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
                 using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
@@ -122,7 +120,7 @@ namespace Terradue.Github {
         /// <param name="username">Username.</param>
         public bool HasKey(string key, string token, string username){
             List<GithubKeyResponse> result;
-            result = GetSSHKeysPublic(username);
+            result = GetSSHKeysPublic(username, token);
             foreach (GithubKeyResponse rkey in result)
                 if (rkey.key.Equals(key)) return true;
             return false;
@@ -133,9 +131,10 @@ namespace Terradue.Github {
         /// </summary>
         /// <param name="title">Title.</param>
         /// <param name="key">Key.</param>
+        /// <param name="username">username.</param>
         /// <param name="token">Token.</param>
-        public void AddSshKey(string title, string key, string token){
-            HttpWebRequest request = CreateWebRequest (this.ApiBaseUrl + "/user/keys?access_token=" + token, "POST");
+        public void AddSshKey(string title, string key, string username, string token){
+            HttpWebRequest request = CreateWebRequest (this.ApiBaseUrl + "/user/keys", "POST", username, token);
 
             GithubKeyRequest gRequest = new GithubKeyRequest();
             gRequest.title = title;
@@ -163,7 +162,7 @@ namespace Terradue.Github {
         /// <param name="githubName">Github name.</param>
         public GithubUserResponse GetUser(string githubName) {
             GithubUserResponse result = new GithubUserResponse();
-            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/users/" + githubName + "?client_id=" + ClientId + "&client_secret=" + ClientSecret, "GET");
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/users/" + githubName, "GET", null, null);
 
             using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
                 using (var streamReader = new StreamReader (httpResponse.GetResponseStream ())) {
@@ -173,6 +172,7 @@ namespace Terradue.Github {
             }
             return result;
         }
+
     }
 }
 

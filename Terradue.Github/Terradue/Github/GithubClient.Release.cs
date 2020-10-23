@@ -7,9 +7,9 @@ using ServiceStack.Text;
 namespace Terradue.Github {
     public partial class GithubClient {
 
-        public List<GithubReleaseResponse> GetReleases(string org, string repo, string token){
+        public List<GithubReleaseResponse> GetReleases(string org, string repo){
             List<GithubReleaseResponse> repos = new List<GithubReleaseResponse>();
-            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/repos/" + org + "/" + repo + "/releases?access_token=" + token, "GET");
+            HttpWebRequest request = CreateWebRequest (ApiBaseUrl + "/repos/" + org + "/" + repo + "/releases", "GET");
 
             try{
                 using (var httpResponse = (HttpWebResponse)request.GetResponse ()) {
