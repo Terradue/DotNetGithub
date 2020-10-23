@@ -1,5 +1,5 @@
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using NuGet4Mono.Extensions;
 
 /*!
 
@@ -22,10 +22,6 @@ using System.Runtime.CompilerServices;
 
 */
 
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using NuGet4Mono.Extensions;
-
 [assembly: AssemblyTitle("Terradue.Github")]
 [assembly: AssemblyDescription("Terradue Github .Net library")]
 [assembly: AssemblyConfiguration("")]
@@ -37,6 +33,6 @@ using NuGet4Mono.Extensions;
 [assembly: AssemblyLicenseUrl("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("1.1.1")]
-[assembly: AssemblyInformationalVersion("1.1.1")]
+[assembly: AssemblyVersion("1.2")]
+[assembly: AssemblyInformationalVersion("1.2")]
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
