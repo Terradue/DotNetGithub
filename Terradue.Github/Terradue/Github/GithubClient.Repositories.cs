@@ -67,8 +67,59 @@ namespace Terradue.Github {
             return repos;
         }
 
+        public bool IsUserRepoCollaborators(string org, string repo, string username) {
+            bool result = false;
+            HttpWebRequest request = CreateWebRequest(ApiBaseUrl + "/repos/" + org + "/" + repo + "/collaborators/" + username, "GET");
+
+            try {
+                using (var httpResponse = (HttpWebResponse)request.GetResponse()) {
+                    if (httpResponse.StatusCode == HttpStatusCode.NoContent) result = true;
+                }
+            } catch (Exception e) {
+                return false;
+            }
+            return result;
+        }
+
+        public void AddCollaboratorToRepo(string org, string repo, string username, string permission) {
+            var result = new GithubUserResponse();
+            HttpWebRequest request = CreateWebRequest(ApiBaseUrl + "/repos/" + org + "/" + repo + "/collaborators/" + username, "PUT");
+
+            string jsonbody = "{\"permission\":\""+permission+"\"}";
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
+                streamWriter.Write(jsonbody);
+                streamWriter.Flush();
+                streamWriter.Close();
+
+                using (var httpResponse = (HttpWebResponse)request.GetResponse()) {
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+                        string json = streamReader.ReadToEnd();
+                        result = JsonSerializer.DeserializeFromString<GithubUserResponse>(json);
+                    }
+                }
+            }
+        }
+
+        public void RemoveCollaboratorFromRepo(string org, string repo, string username) {
+            var result = new GithubUserResponse();
+            HttpWebRequest request = CreateWebRequest(ApiBaseUrl + "/repos/" + org + "/" + repo + "/collaborators/" + username, "DELETE");
+
+            using (var httpResponse = (HttpWebResponse)request.GetResponse()) {
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+                    string json = streamReader.ReadToEnd();
+                }
+            }
+        }
+
     }
 
-
+    public class GithubRepositoryPermission {
+        public static string Push = "push"; // can pull and push, but not administer this repository.
+        public static string Pull = "pull"; // can pull, but not push to or administer this repository 
+        public static string Admin = "admin"; // can pull, push and administer this repository.
+        public static string Maintain = "maintain"; // Recommended for project managers who need to manage the repository without access to sensitive or destructive actions.
+        public static string Triage = "triage"; // Recommended for contributors who need to proactively manage issues and pull requests without write access.
+    }
 }
 
